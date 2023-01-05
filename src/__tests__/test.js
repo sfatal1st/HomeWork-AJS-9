@@ -1,177 +1,48 @@
-import Team from '../js/set';
-import ErrorRepository from '../js/map';
+import MathAttack from '../js/math';
+import ArrayBufferConverter from '../js/arrayBufferConverter';
 
-test('testing Team.add function', () => {
-  const team = new Team();
-  const char = {
-    name: 'мечник',
-    health: 10,
-    level: 2,
-    attack: 80,
-    defence: 40,
-  };
-
-  const expected = [
-    {
-      name: 'мечник',
-      health: 10,
-      level: 2,
-      attack: 80,
-      defence: 40,
-    },
-  ];
-
-  team.add(char);
-  const result = [];
-  team.members.forEach((item) => result.push(item));
-
-  expect(result).toEqual(expected);
+test.each([
+  [1, 100],
+  [2, 90],
+  [3, 80],
+  [4, 70],
+  [5, 60],
+  [6, 50],
+  [7, 40],
+  [8, 30],
+  [9, 20],
+  [10, 10],
+  [11, 0],
+])('testing MathAttack.setAttack function with range %s', (range, expected) => {
+  const character = new MathAttack(100);
+  character.setAttack(range);
+  const result = character.getAttack();
+  expect(result).toBe(expected);
 });
 
-test('testing Team.add error', () => {
-  const team = new Team();
-  const char = {
-    name: 'мечник',
-    health: 10,
-    level: 2,
-    attack: 80,
-    defence: 40,
-  };
-
-  function testingError() {
-    return team.add(char);
-  }
-
-  team.add(char);
-
-  expect(testingError).toThrow('Персонаж');
+test.each([
+  [1, 100],
+  [2, 85],
+  [3, 72],
+  [4, 60],
+  [5, 48],
+  [6, 37],
+  [7, 26],
+  [8, 15],
+  [9, 4],
+  [10, -7],
+])('testing MathAttack.setStoned function with range %s', (range, expected) => {
+  const character = new MathAttack(100);
+  character.setStoned(range);
+  const result = character.getStoned();
+  expect(result).toBe(expected);
 });
 
-test('testing Team.addAll function', () => {
-  const team = new Team();
-  const char1 = {
-    name: 'мечник',
-    health: 10,
-    level: 2,
-    attack: 80,
-    defence: 40,
-  };
-  const char2 = {
-    name: 'лучник',
-    health: 8,
-    level: 2,
-    attack: 180,
-    defence: 20,
-  };
-  const char3 = {
-    name: 'маг',
-    health: 9,
-    level: 2,
-    attack: 160,
-    defence: 10,
-  };
-  const chars = [
-    char1,
-    char2,
-    char3,
-  ];
-  const expected = [
-    {
-      name: 'мечник',
-      health: 10,
-      level: 2,
-      attack: 80,
-      defence: 40,
-    },
-    {
-      name: 'лучник',
-      health: 8,
-      level: 2,
-      attack: 180,
-      defence: 20,
-    },
-    {
-      name: 'маг',
-      health: 9,
-      level: 2,
-      attack: 160,
-      defence: 10,
-    },
-  ];
+test('testing ArrayBufferConverter function', () => {
+  const buffer = new ArrayBufferConverter();
 
-  team.addAll(chars);
-  const result = [];
-  team.members.forEach((item) => result.push(item));
+  buffer.load();
+  const result = buffer.toString();
 
-  expect(result).toEqual(expected);
-});
-
-test('testing Team.toArray function', () => {
-  const team = new Team();
-  const char1 = {
-    name: 'мечник',
-    health: 10,
-    level: 2,
-    attack: 80,
-    defence: 40,
-  };
-  const char2 = {
-    name: 'лучник',
-    health: 8,
-    level: 2,
-    attack: 180,
-    defence: 20,
-  };
-  const char3 = {
-    name: 'маг',
-    health: 9,
-    level: 2,
-    attack: 160,
-    defence: 10,
-  };
-  const chars = [
-    char1,
-    char2,
-    char3,
-  ];
-  const expected = [
-    {
-      name: 'мечник',
-      health: 10,
-      level: 2,
-      attack: 80,
-      defence: 40,
-    },
-    {
-      name: 'лучник',
-      health: 8,
-      level: 2,
-      attack: 180,
-      defence: 20,
-    },
-    {
-      name: 'маг',
-      health: 9,
-      level: 2,
-      attack: 160,
-      defence: 10,
-    },
-  ];
-
-  team.addAll(chars);
-  team.toArray();
-
-  expect(team.arrayMembers).toEqual(expected);
-});
-
-test('testing ErrorRepository.translate function', () => {
-  const error = new ErrorRepository();
-  const result = error.translate(1);
-  expect(result).toBe('Ошибка ввода данных');
-});
-
-test('testing ErrorRepository.translate error', () => {
-  const error = new ErrorRepository();
-  const result = error.translate(777);
-  expect(result).toBe('Unknown error');
+  expect(result).toEqual('{"data":{"user":{"id":1,"name":"Hitman","level":10}}}');
 });
